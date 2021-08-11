@@ -15,7 +15,6 @@ spec:
  - name: app-storage
    emptyDir: {}
 
-----
 kind: Service      # Create new service
 apiVersion: v1     
 metadata:
