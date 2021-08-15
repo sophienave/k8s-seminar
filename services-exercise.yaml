@@ -1,42 +1,39 @@
-apiVersion: v1
+apiVersion: apps/v1
 kind: Deployment
-metadata: 
- name: services-excercise
- spec:
+metadata:
+  name: my-app
+spec:
   selector:
     matchLabels:
-      app: MyApp
+      app: nginx
   replicas: 2 
   template: 
     metadata:
       labels:
-        app: MyApp
-      spec:
-       containers:
-       - name: MyApp 
-         image: supergiantkir/animals:bear 
-         ports: 
-         - containerPort: 80
-         volumeMounts:
-         - name: app-storage
-           mountPath: /storage
-       volumes:
-       - name: app-storage
-         emptyDir: {}
-#---------------------------
-kind: Service      # Create new service
-apiVersion: v1     
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 8080
+        
+---
+
+apiVersion: v1 
+kind: Service    
 metadata:
-  name: my-service # Name of the service
+  name: my-service
 spec:
+  type: LoadBalancer
   selector:
-    app: MyApp    # Run on any pod with label - app: myapp
-  ports:          # Map incoming port to target port
-  - name: http    # Setting multiple ports listterns 
+    app: my-app
+  ports:
+  - name: http
     protocol: TCP
     port: 80
-    targetPort: 9376
+    targetPort: 8080
   - name: https
     protocol: TCP
     port: 443
-    targetPort: 9388
+    targetPort: 8080
